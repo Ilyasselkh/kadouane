@@ -1,0 +1,855 @@
+<odoo>
+  <data>
+
+    <record id="kadouane.view_dmd_form" model="ir.ui.view">
+      <field name="name">kadouane.kadouane.form</field>
+      <field name="model">kadouane.kadouane</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+
+            <button string="Modifier"
+                    groups="kadouane.group_resadv"
+                    name="action_nouvelle"
+                    type="object"
+                    class="btn-primary"/>
+
+            <button string="Supprimer"
+                    groups="kadouane.group_key"
+                    name="action_supprimer"
+                    type="object"
+                    class="btn-primary"/>
+
+            <button string="Transport"
+                    name="action_transport"
+                    type="object"
+                    groups="kadouane.group_adv"
+                    class="btn-primary"
+                    invisible="state != 'nouvelle'"/>
+
+            <button string="Facturation"
+                    name="action_facturation"
+                    groups="kadouane.group_opmag"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'picking'"/>
+
+            <button string="douane"
+                    groups="kadouane.group_adv"
+                    name="action_douane"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'facturation'"/>
+
+            <button string="picking"
+                    groups="kadouane.group_restransport,kadouane.group_resadv"
+                    name="action_picking"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'transport'"/>
+
+            <button string="Expédition"
+                    name="action_exp"
+                    type="object"
+                    class="btn-primary"
+                    invisible="stateShip != 'picking'"/>
+
+            <button string="expédié"
+                    groups="kadouane.group_opmag"
+                    name="action_expdone"
+                    type="object"
+                    class="btn-success"
+                    invisible="stateShip != 'exp'"/>
+
+            <button string="dédouaner"
+                    groups="kadouane.group_douane,kadouane.group_resadv"
+                    name="action_dedouane"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'douane'"/>
+
+            <button string="dédouané"
+                    groups="kadouane.group_douane"
+                    name="action_Cloture"
+                    type="object"
+                    class="btn-success"
+                    invisible="state != 'Cloture'"/>
+
+            <!--
+            <button string="Re-ouvrir le dossier"
+                    groups="kadouane.group_douane, kadouane.group_resadv"
+                    name="action_nouvelle"
+                    class="btn-danger"
+                    invisible="stateShip != 'expdone' or state not in ['mainlevee', 'archive']"
+                    type="object"/>
+            -->
+
+            <button string="Cloturer le dossier"
+                    name="action_Cloture_done"
+                    type="object"
+                    class="btn-warning"
+                    groups="kadouane.group_douane,kadouane.group_resadv"
+                    invisible="closedmd != 'T'"/>
+
+            <div class="row">
+              <field name="state" widget="statusbar" readonly="1"/>
+              <field name="stateShip" widget="statusbar" readonly="1"/>
+            </div>
+
+          </header>
+
+          <sheet>
+
+            <group col="4">
+              <h1 colspan="4">
+                <field name="ismanager" invisible="1"/>
+                <label for="referenceID"/>
+                <field name="referenceID" string="referenceID"/>
+              </h1>
+              <field name="closedmd" invisible="1"/>
+            </group>
+
+            <group string="Informations du client" col="4">
+              <h1 colspan="4">
+                <field name="client_id"
+                       string="Client"
+                       placeholder="selectionner le client"
+                       required="1"
+                       readonly="state != 'nouvelle'"
+                       options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+              </h1>
+              <group>
+                <field name="incoterm" readonly="1"/>
+              </group>
+              <group>
+                <field name="shipto" readonly="1"/>
+              </group>
+              <group>
+                <field name="billto" readonly="1"/>
+              </group>
+              <group>
+                <field name="arnetwork" readonly="1"/>
+              </group>
+            </group>
+
+            <group>
+              <field name="transitmanagement"/>
+            </group>
+
+            <group string="Zone commentaires" col="4">
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire ADV :
+                  <field name="commentaireAdv"
+                         style="color:red ! important;"
+                         string="Commentaire ADV"
+                         readonly="1"
+                         invisible="not commentaireAdv"/>
+                </group>
+              </h2>
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire Transport :
+                  <field name="commentaireTransport"
+                         style="color:red ! important;"
+                         string="Commentaire Transport"
+                         readonly="1"
+                         invisible="not commentaireTransport"/>
+                </group>
+              </h2>
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire preparation :
+                  <field name="commentaireprepa"
+                         style="color:red ! important;"
+                         string="Commentaire preparation"
+                         readonly="1"
+                         invisible="not commentaireprepa"/>
+                </group>
+              </h2>
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire expedition :
+                  <field name="commentaireexp"
+                         style="color:red ! important;"
+                         string="Commentaire preparation"
+                         readonly="1"
+                         invisible="not commentaireexp"/>
+                </group>
+              </h2>
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire transit :
+                  <field name="commentairetransaire"
+                         style="color:red ! important;"
+                         string="Commentaire transit"
+                         readonly="1"
+                         invisible="not commentairetransaire"/>
+                </group>
+              </h2>
+
+            </group>
+
+            <group string="Informations générales" col="4">
+              <group>
+                <field name="typedmd"
+                       required="1"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="picking"
+                       required="1"
+                       autocomplete="off"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+              </group>
+
+              <group>
+                <field name="nbrpalletsadv"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="nbrpalletcolis"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="nbrpalletcolisadvok" invisible="1"/>
+              </group>
+
+              <group>
+                <field name="commentaireAdv"
+                       string="Commentaire"
+                       autocomplete="off"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="create_uid"
+                       string="crée par"
+                       readonly="1"
+                       options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                <field name="create_date" string="crée le" readonly="1"/>
+              </group>
+            </group>
+
+            <group string="Importation des données SAP"
+                   col="4"
+                   groups="kadouane.group_adv"
+                   invisible="state != 'facturation'">
+
+              <group>
+                <field name="filexlsx"
+                       filename="filexlsx_filename"
+                       required="state == 'facturation'"/>
+                <field name="filexlsx_filename"
+                       invisible="1"
+                       required="state == 'facturation'"/>
+              </group>
+
+              <group>
+                <button name="import_customer"
+                        string="Importer"
+                        type="object"
+                        class="btn-info"
+                        groups="kadouane.group_adv"/>
+              </group>
+
+              <group col="2">
+                <field name="statusFichier"
+                       readonly="1"
+                       invisible="statusFichier == 'A telecharger'"
+                       style="color:green;font-weight: bold;"/>
+                <field name="statusFichier"
+                       readonly="1"
+                       invisible="statusFichier == 'fichier OK'"
+                       style="color:red;font-weight: bold;"/>
+
+                <field name="statusFichierOrgCOm"
+                       readonly="1"
+                       invisible="statusFichierOrgCOm == 'A telecharger'"
+                       style="color:green;font-weight: bold;"/>
+                <field name="statusFichierOrgCOm"
+                       readonly="1"
+                       invisible="statusFichierOrgCOm == 'fichier OK'"
+                       style="color:red;font-weight: bold;"/>
+
+                <field name="statusFichierClient"
+                       readonly="1"
+                       invisible="statusFichierClient == 'A telecharger'"
+                       style="color:green;font-weight: bold;"/>
+                <field name="statusFichierClient"
+                       readonly="1"
+                       invisible="statusFichierClient == 'fichier OK'"
+                       style="color:red;font-weight: bold;"/>
+              </group>
+
+              <group col="2">
+                <field name="statusFichierdevis"
+                       readonly="1"
+                       invisible="statusFichierdevis == 'A telecharger'"
+                       style="color:green;font-weight: bold;"/>
+                <field name="statusFichierdevis"
+                       readonly="1"
+                       invisible="statusFichierdevis == 'fichier OK'"
+                       style="color:red;font-weight: bold;"/>
+              </group>
+
+            </group>
+
+            <group col="4">
+            </group>
+
+            <group string="Informations transport" col="4">
+              <group col="2">
+                <field name="type"
+                       required="1"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="typetransport"
+                       required="1"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="transporteurReqNvlDmd" invisible="1"/>
+                <field name="transport_id"
+                       options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
+                       readonly="transporteurReqNvlDmdred == 'R' and not ismanager"
+                       required="transporteurReqNvlDmd == 'T'"
+                       invisible="transporteurReqNvlDmd == 'F'"/>
+                <field name="transporteurReqNvlDmdred" invisible="1"/>
+              </group>
+
+              <group>
+                <field name="valeurTransport"
+                       string="prix du transport"
+                       invisible="transporteurReqNvlDmd == 'F'"
+                       readonly="state not in ['nouvelle', 'transport'] and not ismanager"/>
+                <field name="CURTransport"
+                       string="CUR"
+                       required="valeurTransport > 0"
+                       invisible="transporteurReqNvlDmd == 'F'"
+                       readonly="state not in ['nouvelle', 'transport'] and not ismanager"/>
+                <field name="transportvalueokpayment"
+                       required="state == 'mainlevee'"
+                       invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']"
+                       readonly="state == 'archive' and not ismanager"/>
+              </group>
+
+              <group>
+                <field name="commentaireTransport"
+                       invisible="transporteurReqNvlDmd == 'F'"
+                       readonly="state not in ['nouvelle', 'transport'] and not ismanager"/>
+              </group>
+            </group>
+
+            <group string="Informations Expidition"
+                   col="4"
+                   invisible="state not in ['picking', 'facturation', 'douane', 'Cloture', 'done', 'mainlevee', 'archive']">
+
+              <group>
+                <field name="preparationdone"
+                       invisible="state not in ['picking', 'facturation', 'douane', 'Cloture', 'mainlevee', 'archive']"
+                       readonly="state != 'picking' and not ismanager"
+                       required="state == 'picking'"/>
+
+                <field name="commentaireprepa"
+                       invisible="state not in ['picking', 'facturation', 'douane', 'Cloture', 'mainlevee', 'archive']"
+                       readonly="state != 'picking' and not ismanager"/>
+              </group>
+
+              <group>
+                <field name="commentaireexp"
+                       invisible="stateShip not in ['exp', 'expdone']"
+                       readonly="stateShip != 'exp' and not ismanager"/>
+              </group>
+
+              <field name="remorque"
+                     invisible="stateShip not in ['exp', 'expdone']"
+                     readonly="stateShip != 'exp' or not ismanager">
+                <list editable="bottom">
+                  <field name="expidtionDate" required="1"/>
+                  <field name="plaqueTransport" required="1"/>
+                  <field name="cmr" required="1"/>
+                  <field name="nbrpallets"/>
+                  <field name="nbrcolis"/>
+                  <field name="poidsbrut"/>
+                  <field name="poidsnet"/>
+                  <field name="volume"/>
+                  <field name="telchauffeur" required="1"/>
+                  <field name="numfactures" required="1"/>
+                </list>
+              </field>
+
+            </group>
+
+            <group string="Informations transitaire"
+                   col="4"
+                   invisible="transitairereq == 'F'">
+              <group>
+                <field name="transitaire"
+                       invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']"
+                       readonly="state != 'douane' and not ismanager"
+                       required="state == 'douane'"/>
+
+                <field name="commentairetransaire"
+                       invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']"
+                       readonly="state != 'douane' and not ismanager"/>
+
+                <field name="archivedone"
+                       invisible="state not in ['done', 'mainlevee', 'archive']"
+                       readonly="state != 'done' and not ismanager"/>
+
+                <field name="transitairereq" invisible="1"/>
+              </group>
+
+              <group>
+                <field name="customsvaluefile"
+                       invisible="not arnetwork"
+                       readonly="state != 'nouvelle' and not ismanager"
+                       required="arnetwork == 'True'"/>
+
+                <field name="customsvalue"
+                       invisible="not arnetwork"
+                       readonly="state != 'nouvelle' and not ismanager"
+                       required="arnetwork == 'True'"/>
+              </group>
+
+              <group col="2">
+                <button name="calculeNGP"
+                        string="Calcule NGP"
+                        type="object"
+                        class="btn-info"
+                        invisible="state != 'douane'"
+                        groups="kadouane.group_douane"/>
+              </group>
+
+              <group>
+                <field name="transitvalue"
+                       invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']"
+                       readonly="state not in ['douane', 'Cloture', 'done'] and not ismanager"
+                       required="state == 'Cloture'"/>
+
+                <field name="transitvalueExp"
+                       invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']"
+                       readonly="state not in ['douane', 'Cloture', 'done'] and not ismanager"
+                       required="arnetwork == 'Cloture'"/>
+
+                <field name="transitvalueokpayment"
+                       invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']"
+                       readonly="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive'] and not ismanager"
+                       required="state == 'Cloture'"/>
+              </group>
+            </group>
+
+            <group>
+            </group>
+
+            <notebook>
+
+              <page string="Bon de livraison" name="BL">
+                <field name="dn_ids_withattachement"
+                       readonly="state != 'nouvelle' and not ismanager">
+                  <list editable="bottom">
+                    <field name="numeroBL" required="1"/>
+                    <field name="attachment_dn_ids1" filename="fildn_filename" required="1"/>
+                    <field name="fildn_filename" invisible="1" required="1"/>
+                    <field name="ids_withattachement" invisible="1"/>
+                  </list>
+                </field>
+              </page>
+
+              <page string="Factures"
+                    name="Factures"
+                    invisible="state not in ['picking', 'facturation', 'douane', 'Cloture', 'done', 'mainlevee', 'archive']">
+                <field name="inv_ids"
+                       readonly="state not in ['facturation', 'douane', 'Cloture'] and not ismanager">
+                  <list editable="bottom">
+                    <field name="numeroFacture" required="1"/>
+                    <field name="devis" required="1"/>
+                    <field name="valeurFacture" string="Valeur" required="1"/>
+                    <field name="regime"/>
+                    <field name="dum"/>
+                    <field name="attachment_INV_ids1" filename="filinv_filename" required="1"/>
+                    <field name="filinv_filename" invisible="1" required="1"/>
+                    <field name="inv_id" invisible="1"/>
+                  </list>
+                </field>
+              </page>
+
+              <page string="NGP par reference"
+                    name="NGPref"
+                    invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']">
+                <field name="inv_refs"
+                       readonly="state != 'douane' and not ismanager">
+                  <list editable="bottom">
+                    <field name="article_fg"/>
+                    <field name="designation_fg"/>
+                    <field name="ngp_FG"/>
+                    <field name="um_FG"/>
+                    <field name="article_rm"/>
+                    <field name="designation_rm"/>
+                    <field name="ngp_rm"/>
+                    <field name="um_rm"/>
+                    <field name="BOMqty"/>
+                    <field name="qtyfacture"/>
+                    <field name="totalqty"/>
+                  </list>
+                </field>
+              </page>
+
+              <page string="NGP"
+                    name="NGPref2"
+                    invisible="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive']">
+                <field name="dechargengp"
+                       readonly="state not in ['douane', 'done'] and not ismanager">
+                  <list editable="bottom">
+                    <field name="ngp_rm"/>
+                    <field name="regim"/>
+                    <field name="um_rm"/>
+                    <field name="numdecharge"/>
+                    <field name="qty"/>
+                  </list>
+                </field>
+              </page>
+
+              <page string="Documents" name="Documents">
+                <field name="attachment_docs_ids">
+                  <list editable="bottom">
+                    <field name="attachment_fichier_ids" filename="namedoc"/>
+                    <field name="typedoc"/>
+                    <field name="namedoc"/>
+                  </list>
+                </field>
+              </page>
+
+            </notebook>
+
+            
+
+          </sheet>
+          <chatter/>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_categoryExport_form" model="ir.ui.view">
+      <field name="name">kadouane.categoryex.form</field>
+      <field name="model">kadouane.categoryex</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group col="4">
+              <field name="title"/>
+              <field name="statename"/>
+              <field name="color"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_bom_form" model="ir.ui.view">
+      <field name="name">kadouane.bom.form</field>
+      <field name="model">kadouane.bom</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group col="4">
+              <field name="article_fg"/>
+              <field name="designation_fg"/>
+              <field name="ngp_FG"/>
+              <field name="um_FG"/>
+              <field name="article_rm"/>
+              <field name="designation_rm"/>
+              <field name="ngp_rm"/>
+              <field name="um_rm"/>
+              <field name="BOMqty"/>
+            </group>
+            
+          </sheet>
+          <chatter/>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="kadouane.list">
+      <field name="name">KAdouane list</field>
+      <field name="model">kadouane.kadouane</field>
+      <field name="arch" type="xml">
+        <list default_order="create_date desc">
+          <field name="referenceID"/>
+          <field name="client_id"/>
+          <field name="incoterm"/>
+          <field name="state"/>
+          <field name="create_uid" string="crée par"/>
+          <field name="create_date" string="crée le"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="view_bom_list" model="ir.ui.view">
+      <field name="name">kadouane.bom.list</field>
+      <field name="model">kadouane.bom</field>
+      <field name="arch" type="xml">
+        <list>
+          <header>
+            <button string="Arreter les nouvelles demandes"
+                    name="action_nouvelle"
+                    type="object"
+                    class="btn-primary"/>
+          </header>
+
+          <field name="article_fg"/>
+          <field name="designation_fg"/>
+          <field name="ngp_FG"/>
+          <field name="um_FG"/>
+          <field name="article_rm"/>
+          <field name="designation_rm"/>
+          <field name="ngp_rm"/>
+          <field name="um_rm"/>
+          <field name="BOMqty"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="exporttree" model="ir.ui.view">
+      <field name="name">kadouane.kadouane.tree</field>
+      <field name="model">kadouane.kadouane</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="state"/>
+          <field name="referenceID"/>
+          <field name="client_id"/>
+          <field name="create_uid" string="crée par"/>
+          <field name="create_date" string="crée le"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="act_window1_search" model="ir.ui.view">
+      <field name="name">kadouane.kadouane.search</field>
+      <field name="model">kadouane.kadouane</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="state"/>
+          <field name="referenceID"/>
+          <field name="client_id"/>
+          <field name="stateShip"/>
+          <field name="typedmd"/>
+          <field name="archiveclosed"/>
+        </search>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_categoryexport">
+      <field name="name">Gestion du transport et douane</field>
+      <field name="res_model">kadouane.categoryex</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_import">
+      <field name="name">Gestion du transport et douane</field>
+      <field name="res_model">kadouane.dmdimport</field>
+      <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_bom">
+      <field name="name">bom window</field>
+      <field name="res_model">kadouane.bom</field>
+      <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_transporteur">
+      <field name="name">Transporteur window</field>
+      <field name="res_model">kadouane.transporteur</field>
+      <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_fournisseur">
+      <field name="name">fournisseur window</field>
+      <field name="res_model">kadouane.supplier</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window1">
+      <field name="name">KAdouane window</field>
+      <field name="res_model">kadouane.kadouane</field>
+      <field name="view_mode">list,form,kanban,calendar</field>
+    </record>
+
+    <record id="categoryExport_type_kanban" model="ir.ui.view">
+    <field name="name">kadouane.categoryex.kanban</field>
+    <field name="model">kadouane.categoryex</field>
+    <field name="arch" type="xml">
+        <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_stock_kanban"
+                create="0"
+                group_create="false">
+
+            <templates>
+                <t t-name="card">
+                    <field name="color" invisible="1"/>
+                    <field name="statename" invisible="1"/>
+
+                    <div t-attf-class="oe_kanban_color_#{record.color.raw_value or 0} container o_kanban_card_content"
+     style="height:150px">
+                        <div class="row">
+
+                            <div class="o_primary">
+                                <h2>
+                                    <field name="title"/>
+                                </h2>
+                            </div>
+
+                            <div class="o_secondary"></div>
+
+                            <div t-if="record.statename.raw_value == 'nouvelle'" class="col-4 o_kanban_primary_right">
+                                <button class="btn btn-success"
+                                        name="get_create_nouvelledemande_form_action"
+                                        type="object">
+                                    <span>Créer</span>
+                                </button>
+                            </div>
+
+                            <div class="col-6 o_kanban_primary_left">
+                                <button class="btn btn-primary"
+                                        name="get_stock_picking_action_picking_type"
+                                        type="object"
+                                        context="{'search_default_state': statename}"
+                                        t-if="record.statename.raw_value != 'exp'">
+                                    <span t-if="record.statename.raw_value == 'nouvelle'">EN COURS (<field class="o_secondary" name="countnvl" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'transport'">EN COURS (<field class="o_secondary" name="counttransport" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'douane'">EN COURS (<field class="o_secondary" name="countdouane" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'picking'">EN COURS (<field class="o_secondary" name="countpicking" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'Cloture'">EN COURS (<field class="o_secondary" name="countCloture" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'done'">EN COURS (<field class="o_secondary" name="countdone" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'mainlevee'">EN COURS (<field class="o_secondary" name="countmainlevee" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'facturation'">EN COURS (<field class="o_secondary" name="countFacturation" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'archive'">EN COURS (<field class="o_secondary" name="countArchive" readonly="1"/>)</span>
+                                </button>
+
+                                <button class="btn btn-primary"
+                                        name="get_stock_picking_action_picking_type"
+                                        type="object"
+                                        context="{'search_default_stateShip': statename}"
+                                        t-if="record.statename.raw_value == 'exp'">
+                                    <span>EN COURS (<field class="o_secondary" name="countexp" readonly="1"/>)</span>
+                                </button>
+
+                                <button class="btn btn-primary"
+                                        name="get_stock_picking_action_picking_type"
+                                        type="object"
+                                        context="{'search_default_state': statename}"
+                                        t-if="record.statename.raw_value == 'nouvelle'">
+                                    <span>DMD EXP(0)</span>
+                                </button>
+
+                                <button class="btn btn-success"
+                                        name="get_stock_picking_action_picking_type"
+                                        type="object"
+                                        context="{'search_default_state': statename, 'search_default_archiveclosed': 'True'}"
+                                        t-if="record.statename.raw_value == 'archive'">
+                                    <span>archivé(<field class="o_secondary" name="countArchiveOK" readonly="1"/>)</span>
+                                </button>
+
+                                <button class="btn btn-primary"
+                                        name="get_stock_picking_action_picking_type"
+                                        type="object"
+                                        context="{'search_default_state': statename}"
+                                        t-if="record.statename.raw_value == 'nouvelle'">
+                                    <span>DMD PROJET(0)</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_exp_calendar">
+      <field name="name">Calendrier des expiditions</field>
+      <field name="res_model">kadouane.kadouane</field>
+      <field name="view_mode">calendar</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_imp_calendar">
+      <field name="name">Calendrier des imports(ETD)</field>
+      <field name="res_model">kadouane.dmdimport</field>
+      <field name="view_mode">calendar</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_imp_eta_calendar">
+      <field name="name">Calendrier des imports(ETA)</field>
+      <field name="res_model">kadouane.dmdimport</field>
+      <field name="view_mode">calendar</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window_categoryImport">
+      <field name="name">Gestion du transport et douane</field>
+      <field name="res_model">kadouane.categoryimport</field>
+      <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <menuitem name="Gestion de la douane" id="kadouane.menu_root" sequence="1"/>
+    <menuitem name="Master Data"
+              id="kadouane.menu_root_masterdata"
+              groups="kadouane.group_resadv"
+              parent="kadouane.menu_root"
+              sequence="3"/>
+
+    <menuitem name="Expeditions"
+              sequence="1"
+              id="kadouane.menu_export"
+              parent="kadouane.menu_root"/>
+
+    <menuitem name="les demandes"
+              sequence="1"
+              id="kadouane.menu_dmd_export"
+              parent="kadouane.menu_export"
+              action="kadouane.action_window_categoryexport"/>
+
+    <menuitem name="Calendrier"
+              sequence="2"
+              id="kadouane.menu_cal_export"
+              parent="kadouane.menu_export"
+              action="kadouane.action_window_exp_calendar"/>
+
+    <menuitem name="Reception"
+              sequence="2"
+              id="kadouane.menu_import"
+              parent="kadouane.menu_root"/>
+
+    <menuitem name="les demandes import"
+              sequence="1"
+              id="kadouane.menu_categoryimport"
+              parent="kadouane.menu_import"
+              action="kadouane.action_window_categoryImport"/>
+
+    <menuitem name="Calendrier (ETD)"
+              sequence="2"
+              id="kadouane.menu_cal_import"
+              parent="kadouane.menu_import"
+              action="kadouane.action_window_imp_calendar"/>
+
+    <menuitem name="Calendrier (ETA)"
+              sequence="3"
+              id="kadouane.menu_cal_ETA_import"
+              parent="kadouane.menu_import"
+              action="kadouane.action_window_imp_eta_calendar"/>
+
+    <menuitem name="BOM"
+              id="kadouane.bom_export"
+              parent="kadouane.menu_root_masterdata"
+              action="kadouane.action_window_bom"/>
+
+    <menuitem name="Transporteurs"
+              id="kadouane.transporteur"
+              parent="kadouane.menu_root_masterdata"
+              action="kadouane.action_window_transporteur"/>
+
+    <menuitem name="Transitaire"
+              id="kadouane.transitaire"
+              parent="kadouane.menu_root_masterdata"
+              action="kadouane.action_window_transporteur"/>
+
+    <menuitem name="Fournisseur"
+              id="kadouane.supplier"
+              parent="kadouane.menu_root_masterdata"
+              action="kadouane.action_window_fournisseur"/>
+
+  </data>
+</odoo>
