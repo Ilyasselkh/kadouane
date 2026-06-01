@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="order_transit">
+        <t t-call="web.html_container">
+
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        
+                        <div class="page">
+                            <div class="oe_structure"/>
+                                <h2 class="mt-12">
+                                    <div class="text-center">
+                                        <strong>
+                                            ORDRE DE TRANSIT
+                                        </strong>
+                                    </div>
+                                    
+                                </h2>
+
+                                <h2 class="mt-4">
+                                    Numero d'order : 
+                                    <span t-field="doc.referenceID"/>
+                                </h2>
+
+                                 
+                                    <div>Client : <strong><span t-field="doc.client_id.name"/></strong></div> 
+                                    <div style="font-weight:normal">Incoterm : <span t-field="doc.client_id.incoterm"  style="font-size:1.1em;font-weight:900"/></div>
+                                     
+                                     <div style="font-weight:normal">Montant total en devise :  <span t-field="doc.totalvfactures"  style="font-size:1.1em;font-weight:900"/> <span t-field="doc.devisFactures" style="font-size:1.1em;font-weight:900"/></div>
+                                  
+
+                                    <div style="font-weight:normal">Nombre de factures : <span t-field="doc.nbrFactures" style="font-size:1.1em;font-weight:900"/></div>
+                            
+                             <h2 class="mt-4">
+                                    Factures : 
+                                  
+                                </h2>
+
+                            <table class="table table-sm o_main_table mt-4">
+                                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                                <thead style="display: table-row-group">
+                                    <tr>
+                                        <th name="NGP" class="text-center" style="font-size:1.1em;font-weight:900">Facture</th>
+
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Valeur</th>                                      
+                                    </tr>
+                                </thead>
+                                <tbody class="sale_tbody">
+                                    <t t-foreach="doc.inv_ids" t-as="line">
+                                        <tr >
+                                            <td name="td_name" class="text-center"><span t-field="line.numeroFacture"/></td>
+
+                                            
+                                            <td name="td_name" class="text-center"><span t-field="line.valeurFacture"/></td>
+                                           
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                             <h2 class="mt-4">
+                                    Decharge : 
+                                  
+                                </h2>
+
+                            <table class="table table-sm o_main_table mt-4">
+                                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                                <thead style="display: table-row-group">
+                                    <tr>
+                                        <th name="NGP" class="text-center" style="font-size:1.1em;font-weight:900">NGP</th>
+                                        <th name="NGP" class="text-center" style="font-size:1.1em;font-weight:900">Regime a decharger</th>
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Quantité a decharger</th>
+                                        <th name="Qty a décharger" class="text-center" style="font-size:1.1em;font-weight:900">Unité</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody class="sale_tbody">
+                                    <t t-foreach="doc.dechargengp" t-as="line">
+                                        <tr >
+                                            <td name="td_name" class="text-center"><span t-field="line.ngp_rm"/></td>
+
+                                            <td name="td_name" class="text-center"><span t-field="line.regim"/></td>
+                                            
+                                            <td name="td_priceunit" class="text-center">
+                                                
+                                                <t t-esc="line.qty"  t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+
+                                            <td name="td_quantity" class="text-center">
+                                                <span t-field="line.um_rm"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+
+                    </t> 
+
+                  
+                </t>
+
+          
+        </t>
+    </template>
+</odoo>
+
+
+
