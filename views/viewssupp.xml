@@ -1,0 +1,499 @@
+<odoo>
+  <data>
+
+    <record id="kadouane.view_dmd_imp_form" model="ir.ui.view">
+      <field name="name">kadouane.dmdimport.form</field>
+      <field name="model">kadouane.dmdimport</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <button string="Transport"
+                    name="action_transport"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'nouvelle'"/>
+
+            <button string="manager log"
+                    name="action_managerlog"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'transport'"/>
+
+            <button string="valider"
+                    name="action_respdouane"
+                    type="object"
+                    class="btn-success"
+                    invisible="state != 'validationMlog'"/>
+
+            <button string="Refuser"
+                    name="action_transport"
+                    type="object"
+                    class="btn-danger"
+                    invisible="state != 'validationMlog'"/>
+
+            <button string="att pick-up"
+                    name="action_picking"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'douane'"/>
+
+            <button string="Envoi d'OT"
+                    name="action_freight"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'picking'"/>
+
+            <button string="att BAD"
+                    name="action_bad"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'factureFreight'"/>
+
+            <button string="att DUM"
+                    name="action_dum"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'bad'"/>
+
+            <button string="att Ticket"
+                    name="action_ticket"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'attenteDUM'"/>
+
+            <button string="att caution"
+                    name="action_caution"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'ticketPaiment'"/>
+
+            <button string="att Liv"
+                    name="action_liv"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'caution'"/>
+
+            <button string="Archiver"
+                    name="action_archive"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'livraison'"/>
+
+            <button string="Modifier"
+                    name="action_nouvelle"
+                    type="object"
+                    class="btn-primary"/>
+
+            <button string="Supprimer"
+                    groups="kadouane.group_key"
+                    name="action_supprimer"
+                    type="object"
+                    class="btn-primary"/>
+
+            <div class="row">
+              <field name="state" widget="statusbar" readonly="1"/>
+            </div>
+          </header>
+
+          <sheet>
+
+            <group col="4">
+              <h1 colspan="4">
+                <field name="ismanager" invisible="1"/>
+                <label for="referenceID"/>
+                <field name="referenceID" string="referenceID"/>
+              </h1>
+            </group>
+
+            <group string="Informations du Fournisseur" col="4">
+              <h1 colspan="4">
+                <field name="supplier_id"
+                       string="Supplier"
+                       placeholder="selectionner le Fournisseur"
+                       required="1"
+                       readonly="state != 'nouvelle'"
+                       options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+              </h1>
+
+              <field colspan="4" name="personneactontacternom" readonly="state != 'nouvelle'"/>
+              <field colspan="4" name="personneactontactertel" readonly="state != 'nouvelle'"/>
+              <field colspan="4" name="personneactontactemail" readonly="state != 'nouvelle'"/>
+            </group>
+
+            <group>
+              <group>
+                <field name="customizedSupplier" readonly="state != 'nouvelle'"/>
+                <field name="customizedSupplier_RaisonSociale" invisible="not customizedSupplier"/>
+                <field name="customizedSupplier_contactName" invisible="not customizedSupplier"/>
+              </group>
+              <group>
+                <field name="customizedSupplier_contactEmail" invisible="not customizedSupplier"/>
+                <field name="customizedSupplier_contactTel" invisible="not customizedSupplier"/>
+                <field name="customizedSupplier_incoterm" invisible="not customizedSupplier"/>
+              </group>
+            </group>
+
+            <group string="Zone commentaires" col="4">
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire demendeur :
+                  <field name="commentaireAdv"
+                         style="color:red ! important;"
+                         string="Commentaire ADV"
+                         readonly="1"
+                         invisible="not commentaireAdv"/>
+                </group>
+              </h2>
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire Transport :
+                  <field name="commentaireTransport"
+                         style="color:red ! important;"
+                         string="Commentaire Transport"
+                         readonly="1"
+                         invisible="not commentaireTransport"/>
+                </group>
+              </h2>
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire transit :
+                  <field name="commentairetransaire"
+                         style="color:red ! important;"
+                         string="Commentaire transit"
+                         readonly="1"
+                         invisible="not commentairetransaire"/>
+                </group>
+              </h2>
+
+              <h2 colspan="4">
+                <group>
+                  Commentaire Reception :
+                  <field name="commentaireexp"
+                         style="color:red ! important;"
+                         string="Commentaire Reception"
+                         readonly="1"
+                         invisible="not commentaireexp"/>
+                </group>
+              </h2>
+
+            </group>
+
+            <group string="Informations générales" col="4">
+              <group>
+                <field name="typedmd"
+                       required="1"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="dateoperation"
+                       required="1"
+                       autocomplete="off"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+                <field name="daterisk"
+                       required="1"
+                       autocomplete="off"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+
+                <field name="commentaireAdv"
+                       string="Commentaire"
+                       autocomplete="off"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+              </group>
+
+              <group>
+                <field name="create_uid" string="crée par"/>
+                <field name="create_date" string="crée le"/>
+              </group>
+            </group>
+
+            <group string="Informations transport" col="4">
+              <group col="4">
+                <field name="typetransport"
+                       required="1"
+                       readonly="state != 'nouvelle' and not ismanager"/>
+
+                <field name="transport_id"
+                       options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
+                       readonly="state != 'transport' and not ismanager"
+                       required="state == 'transport'"
+                       invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"/>
+              </group>
+
+              <group>
+                <field name="pickingETD"
+                       autocomplete="off"
+                       readonly="state != 'transport' and not ismanager"
+                       invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       required="state == 'transport'"/>
+
+                <field name="pickingETA"
+                       autocomplete="off"
+                       readonly="state != 'transport' and not ismanager"
+                       invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       required="state == 'transport'"/>
+
+                <field name="trackingNumber"
+                       readonly="state != 'transport' and not ismanager"
+                       invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"/>
+
+                <field name="pickingETDok"
+                       autocomplete="off"
+                       readonly="state != 'transport' and not ismanager"
+                       invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"/>
+
+                <field name="pickingETDok"
+                       autocomplete="off"
+                       readonly="state != 'transport' and not ismanager"
+                       invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"/>
+              </group>
+            </group>
+
+            <group>
+              <field name="valeurTransport"
+                     string="prix du transport"
+                     invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                     readonly="state != 'transport' and not ismanager"/>
+
+              <field name="valeurTransportExp"
+                     invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                     readonly="state != 'transport' and not ismanager"/>
+
+              <field name="valeurTransportok"
+                     string="prix du transport facture"
+                     invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                     readonly="state != 'transport' and not ismanager"/>
+
+              <field name="CURTransport"
+                     string="CUR"
+                     invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                     readonly="state != 'transport' and not ismanager"/>
+
+              <field name="transportvalueokpayment"
+                     invisible="state not in ['douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                     readonly="state == 'archive' and not ismanager"/>
+            </group>
+
+            <group>
+              <field name="commentaireTransport"
+                     invisible="state not in ['transport', 'validationMlog', 'validationMFi', 'validationMD', 'douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                     readonly="state != 'transport' and not ismanager"/>
+            </group>
+
+            <group string="Informations transitaire"
+                   col="4"
+                   invisible="transitairereq == 'F'">
+              <group>
+                <field name="transitaire"
+                       invisible="state not in ['douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       readonly="state != 'douane' and not ismanager"
+                       required="state == 'douane'"/>
+
+                <field name="commentairetransaire"
+                       invisible="state not in ['douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       readonly="state != 'douane' and not ismanager"/>
+
+                <field name="archivedone"
+                       invisible="state not in ['douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       readonly="state != 'done' and not ismanager"/>
+
+                <field name="transitairereq" invisible="1"/>
+              </group>
+
+              <group>
+                <field name="transitvalue"
+                       invisible="state not in ['douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       readonly="state not in ['douane', 'Cloture', 'done'] and not ismanager"
+                       required="state == 'Cloture'"/>
+
+                <field name="transitvalueExp"
+                       invisible="state not in ['douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       readonly="state not in ['douane', 'Cloture', 'done'] and not ismanager"
+                       required="state == 'Cloture'"/>
+
+                <field name="transitvalueokpayment"
+                       invisible="state not in ['douane', 'picking', 'factureFreight', 'bad', 'attenteDUM', 'ticketPaiment', 'caution', 'livraison', 'archive']"
+                       readonly="state not in ['douane', 'Cloture', 'done', 'mainlevee', 'archive'] and not ismanager"
+                       required="state == 'Cloture'"/>
+              </group>
+            </group>
+
+            <group string="Informations Reception"
+                   col="4"
+                   invisible="state not in ['livraison', 'archive']">
+              <group>
+                <field name="datereception"
+                       invisible="state not in ['livraison', 'archive']"
+                       readonly="state != 'livraison' and not ismanager"
+                       required="state == 'archive'"/>
+
+                <field name="commentaireexp"
+                       invisible="state not in ['livraison', 'archive']"
+                       readonly="state != 'livraison' and not ismanager"/>
+              </group>
+            </group>
+
+            <group>
+            </group>
+
+            <notebook>
+              <page string="Marchandise" name="Marchandise">
+                <field name="marchandise_ids">
+                  <list editable="bottom">
+                    <field name="typetransport" required="1" style="width: 10%;"/>
+                    <field name="nbr" required="typetransport != 'Cfacture'"/>
+                    <field name="poids" required="typetransport != 'Cfacture'" style="width: 20%;"/>
+                    <field name="valeur" required="typetransport != 'Cfacture'" style="width: 10%;"/>
+                    <field name="Long" required="typetransport != 'Cfacture'" style="width: 10%;"/>
+                    <field name="Largeur" required="typetransport != 'Cfacture'" style="width: 10%;"/>
+                    <field name="hauteur" required="typetransport != 'Cfacture'" style="width: 10%;"/>
+                    <field name="FactureN" required="1" style="width: 10%;"/>
+                    <field name="BlN" required="1" style="width: 10%;"/>
+                    <field name="DUMN" style="width: 10%;"/>
+                    <field name="dn_attachment_ids" widget="many2many_binary" string="Attachments DN" options="{'no_create': True}"/>
+                    <field name="invoice_attachment_ids" widget="many2many_binary" string="Attachments Invoice" options="{'no_create': True}"/>
+                    <field name="regime" required="1" style="width: 10%;"/>
+                    <field name="commentairedanslorderdetransit" style="width: 10%;"/>
+                    <field name="commentaireinterne" style="width: 10%;"/>
+                  </list>
+                </field>
+              </page>
+
+              <page string="Documents" name="Documents">
+                <field name="attachment_imp_docs_ids">
+                  <list editable="bottom">
+                    <field name="attachment_fichier_ids" filename="namedoc"/>
+                    <field name="typedoc"/>
+                    <field name="namedoc"/>
+                    <field name="commentaire"/>
+                    <field name="anomalie"/>
+                  </list>
+                </field>
+              </page>
+            </notebook>
+
+            <chatter/>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="importtree" model="ir.ui.view">
+      <field name="name">kadouane.dmdimport.tree</field>
+      <field name="model">kadouane.dmdimport</field>
+      <field name="arch" type="xml">
+        <list default_order="create_date desc">
+          <field name="referenceID"/>
+          <field name="state"/>
+          <field name="name"/>
+          <field name="create_uid" string="crée par"/>
+          <field name="create_date" string="crée le"/>
+        </list>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="kadouane.action_window2">
+      <field name="name">KAdouane window</field>
+      <field name="res_model">kadouane.dmdimport</field>
+      <field name="view_mode">list,form,kanban,calendar</field>
+    </record>
+
+    <record id="view_categoryImport_form" model="ir.ui.view">
+      <field name="name">kadouane.categoryimport.form</field>
+      <field name="model">kadouane.categoryimport</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group col="4">
+              <field name="title"/>
+              <field name="statename"/>
+              <field name="color"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="act_window2_search" model="ir.ui.view">
+      <field name="name">kadouane.dmdimport.search</field>
+      <field name="model">kadouane.dmdimport</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="referenceID"/>
+          <field name="state"/>
+          <field name="name"/>
+          <field name="supplier_id"/>
+          <field name="billto"/>
+          <field name="transitaire"/>
+          <field name="transport_id"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="categoryImport_type_kanban" model="ir.ui.view">
+    <field name="name">kadouane.categoryimport.kanban</field>
+    <field name="model">kadouane.categoryimport</field>
+    <field name="arch" type="xml">
+        <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_stock_kanban"
+                create="0"
+                group_create="false">
+
+            <templates>
+                <t t-name="card">
+                    <field name="color" invisible="1"/>
+                    <field name="statename" invisible="1"/>
+
+                    <div t-attf-class="oe_kanban_color_#{record.color.raw_value or 0} container o_kanban_card_content"
+     style="height:150px">
+                        <div class="row">
+
+                            <div class="o_primary">
+                                <h2>
+                                    <field name="title"/>
+                                </h2>
+                            </div>
+
+                            <div class="o_secondary"></div>
+
+                            <div t-if="record.statename.raw_value == 'nouvelle'" class="col-4 o_kanban_primary_right">
+                                <button class="btn btn-success"
+                                        name="get_create_nouvelledemande_form_action"
+                                        type="object">
+                                    <span>Créer</span>
+                                </button>
+                            </div>
+
+                            <div class="col-6 o_kanban_primary_left">
+                                <button class="btn btn-primary"
+                                        name="get_stock_picking_action_picking_type1"
+                                        type="object"
+                                        context="{'search_default_state': statename}">
+                                    <span t-if="record.statename.raw_value == 'nouvelle'">EN COURS (<field class="o_secondary" name="countnvl" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'transport'">EN COURS (<field class="o_secondary" name="counttransport" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'validationMlog'">EN COURS (<field class="o_secondary" name="countlogman" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'validationMFi'">EN COURS (<field class="o_secondary" name="countfiman" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'validationMD'">EN COURS (<field class="o_secondary" name="countmd" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'picking'">EN COURS (<field class="o_secondary" name="countpicking" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'douane'">EN COURS (<field class="o_secondary" name="countot" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'factureFreight'">EN COURS (<field class="o_secondary" name="countfreight" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'bad'">EN COURS (<field class="o_secondary" name="countbad" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'attenteDUM'">EN COURS (<field class="o_secondary" name="countdum" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'ticketPaiment'">EN COURS (<field class="o_secondary" name="countticketpaiment" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'caution'">EN COURS (<field class="o_secondary" name="countattcaution" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'livraison'">EN COURS (<field class="o_secondary" name="countrecp" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'archive'">EN COURS (<field class="o_secondary" name="countArchive" readonly="1"/>)</span>
+                                    <span t-if="record.statename.raw_value == 'corbeille'">EN COURS (<field class="o_secondary" name="countcorbeille" readonly="1"/>)</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+  </data>
+</odoo>
