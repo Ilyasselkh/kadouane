@@ -1,0 +1,27 @@
+<odoo>
+  <data>
+
+    <record id="kadouane.view_exp_calendar" model="ir.ui.view">
+      <field name="name">kadouane.kadouane.calendar.view</field>
+      <field name="model">kadouane.kadouane</field>
+      <field name="arch" type="xml">
+        <calendar string="Calendrier des clients"
+                  date_start="picking"
+                  color="state"
+                  quick_create="false"
+                  event_open_popup="true"
+                  create="true"
+                  edit="true"
+                  delete="true">
+          <field name="referenceID"/>
+          <field name="create_uid" filters="true"/>
+          <field name="client_id" filters="true"/>
+          <field name="state" filters="true"/>
+          <field name="stateShip" filters="true" string="status shipement"/>
+          <field name="incoterm"/>
+        </calendar>
+      </field>
+    </record>
+
+  </data>
+</odoo>
