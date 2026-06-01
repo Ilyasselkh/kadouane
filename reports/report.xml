@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="report_order_transit" model="ir.actions.report">
+            <field name="name">Order de transit</field>
+            <field name="model">kadouane.kadouane</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">kadouane.order_transit</field>
+            <field name="report_file">kadouane.order_transit</field>
+            <field name="binding_model_id" ref="model_kadouane_kadouane"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+        <record id="report_import_order_transport" model="ir.actions.report">
+            <field name="name">Demande de cotation</field>
+            <field name="model">kadouane.dmdimport</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">kadouane.order_transport</field>
+            <field name="report_file">kadouane.order_transport</field>
+            <field name="binding_model_id" ref="model_kadouane_dmdimport"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+        <record id="report_import_order_transit" model="ir.actions.report">
+            <field name="name">Order de transit Import</field>
+            <field name="model">kadouane.dmdimport</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">kadouane.order_transit_import</field>
+            <field name="report_file">kadouane.order_transit_import</field>
+            <field name="binding_model_id" ref="model_kadouane_dmdimport"/>
+            <field name="binding_type">report</field>
+        </record>
+
+</odoo>
