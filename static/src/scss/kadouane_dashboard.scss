@@ -1,0 +1,653 @@
+.kadouane_dashboard {
+    --kd-ink: #111827;
+    --kd-muted: #667085;
+    --kd-line: rgba(17, 24, 39, 0.10);
+    --kd-accent: #7058a7;
+    --kd-accent-dark: #4d3b82;
+    --kd-accent-2: #22b879;
+    --kd-accent-rgb: 112, 88, 167;
+    --kd-shadow: 0 30px 72px rgba(22, 30, 58, 0.22);
+    --kd-soft-shadow: 0 14px 34px rgba(22, 30, 58, 0.12);
+
+    position: relative;
+    min-height: calc(100vh - 104px);
+    padding: 26px;
+    overflow: hidden;
+    gap: 16px;
+    background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.22) 40%, rgba(255, 255, 255, 0.72)),
+        radial-gradient(circle at 9% 6%, rgba(112, 88, 167, 0.24), transparent 27%),
+        radial-gradient(circle at 92% 11%, rgba(34, 184, 121, 0.18), transparent 29%),
+        radial-gradient(circle at 56% 108%, rgba(14, 165, 233, 0.16), transparent 34%),
+        linear-gradient(135deg, #f8fafc 0%, #edf4f7 44%, #f6f3fb 100%);
+    background-size: 160% 160%, 135% 135%, 135% 135%, 140% 140%, 100% 100%;
+    isolation: isolate;
+    animation: kdDashboardFlow 15s ease-in-out infinite alternate;
+}
+
+.kadouane_dashboard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(17, 24, 39, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17, 24, 39, 0.04) 1px, transparent 1px);
+    background-size: 38px 38px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.75), transparent 88%);
+    z-index: -2;
+}
+
+.kadouane_dashboard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        conic-gradient(from 140deg at 20% 15%, transparent 0 22%, rgba(255, 255, 255, 0.72) 28%, transparent 34% 100%),
+        linear-gradient(110deg, transparent 0 38%, rgba(255, 255, 255, 0.46) 48%, transparent 58% 100%);
+    mix-blend-mode: screen;
+    opacity: 0.60;
+    transform: translateX(-18%);
+    animation: kdAmbientSweep 9s ease-in-out infinite;
+    z-index: -1;
+}
+
+.kadouane_dashboard .o_kanban_record {
+    border: 0;
+    background: transparent;
+    animation: kdCardIn 0.64s cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.kadouane_dashboard .o_kanban_record:nth-child(2n) {
+    animation-delay: 0.05s;
+}
+
+.kadouane_dashboard .o_kanban_record:nth-child(3n) {
+    animation-delay: 0.10s;
+}
+
+.kadouane_dashboard .o_kanban_record:nth-child(4n) {
+    animation-delay: 0.15s;
+}
+
+.kadouane_dashboard .kd_dashboard_card {
+    position: relative;
+    min-height: 206px;
+    height: 100%;
+    overflow: hidden;
+    padding: 22px 23px 20px;
+    border: 1px solid var(--kd-line);
+    border-radius: 8px;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.78) 58%, rgba(255, 255, 255, 0.62)),
+        radial-gradient(circle at 100% 0%, rgba(var(--kd-accent-rgb), 0.16), transparent 34%),
+        linear-gradient(135deg, rgba(var(--kd-accent-rgb), 0.12), rgba(34, 184, 121, 0.08));
+    box-shadow: var(--kd-soft-shadow);
+    backdrop-filter: blur(14px);
+    transform: translateZ(0);
+    transition:
+        transform 0.28s cubic-bezier(0.2, 0.82, 0.2, 1),
+        box-shadow 0.28s ease,
+        border-color 0.28s ease,
+        filter 0.28s ease;
+}
+
+.kadouane_dashboard .kd_dashboard_card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(120deg, transparent 6%, rgba(255, 255, 255, 0.92), var(--kd-accent), var(--kd-accent-2), transparent 76%);
+    background-size: 300% 300%;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0.62;
+    pointer-events: none;
+    animation: kdBorderRun 4.8s linear infinite;
+}
+
+.kadouane_dashboard .kd_dashboard_card::after {
+    content: "";
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.48)),
+        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), transparent 24%),
+        linear-gradient(135deg, rgba(var(--kd-accent-rgb), 0.34), rgba(34, 184, 121, 0.22));
+    box-shadow:
+        0 16px 34px rgba(var(--kd-accent-rgb), 0.26),
+        inset 0 0 0 9px rgba(255, 255, 255, 0.30),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.88);
+    animation: kdBadgePulse 3.8s ease-in-out infinite;
+}
+
+.kadouane_dashboard .kd_dashboard_title::before {
+    content: "";
+    position: absolute;
+    right: 34px;
+    top: 30px;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--kd-accent-dark);
+    border-top: 0;
+    border-left: 0;
+    border-radius: 2px;
+    opacity: 0.76;
+    transform: rotate(-45deg);
+}
+
+.kadouane_dashboard .kd_dashboard_card > .kd_card_glow::after {
+    content: "";
+    position: absolute;
+    inset: 52px -32px auto auto;
+    width: 260px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.92), transparent);
+    transform: rotate(-24deg) translateX(-80px);
+    animation: kdScanLine 4.2s ease-in-out infinite;
+}
+
+.kadouane_dashboard .kd_dashboard_card:hover {
+    transform: translateY(-9px) scale(1.018);
+    border-color: rgba(var(--kd-accent-rgb), 0.42);
+    box-shadow: var(--kd-shadow);
+    filter: saturate(1.04);
+}
+
+.kadouane_dashboard .kd_card_glow {
+    position: absolute;
+    inset: auto -38px -58px auto;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(var(--kd-accent-rgb), 0.24), transparent 62%),
+        radial-gradient(circle at 70% 25%, rgba(34, 184, 121, 0.18), transparent 44%);
+    filter: blur(2px);
+    pointer-events: none;
+    opacity: 0.86;
+    animation: kdGlowFloat 6s ease-in-out infinite;
+    transition: transform 0.34s ease, opacity 0.34s ease;
+}
+
+.kadouane_dashboard .kd_dashboard_card:hover .kd_card_glow {
+    transform: scale(1.22) translate(-12px, -10px);
+    opacity: 1;
+}
+
+.kadouane_dashboard .kd_dashboard_row {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0;
+}
+
+.kadouane_dashboard .kd_dashboard_title {
+    position: relative;
+    flex: 1 1 100%;
+    max-width: calc(100% - 56px);
+}
+
+.kadouane_dashboard .kd_dashboard_title h2 {
+    position: relative;
+    margin: 0 0 14px;
+    color: var(--kd-ink);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.16;
+}
+
+.kadouane_dashboard .kd_metric {
+    position: relative;
+    flex: 1 1 100%;
+    order: 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: end;
+    gap: 2px 12px;
+    max-width: 100%;
+    margin: 0 0 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(var(--kd-accent-rgb), 0.14);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgba(var(--kd-accent-rgb), 0.16), rgba(255, 255, 255, 0.68)),
+        rgba(255, 255, 255, 0.48);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.72),
+        0 10px 24px rgba(var(--kd-accent-rgb), 0.08);
+    transition: transform 0.26s ease, background 0.26s ease;
+}
+
+.kadouane_dashboard .kd_dashboard_card:hover .kd_metric {
+    transform: translateY(-2px);
+    background:
+        linear-gradient(135deg, rgba(var(--kd-accent-rgb), 0.20), rgba(255, 255, 255, 0.78)),
+        rgba(255, 255, 255, 0.56);
+}
+
+.kadouane_dashboard .kd_metric_label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--kd-muted);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.kadouane_dashboard .kd_metric_label::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--kd-accent-2);
+    box-shadow: 0 0 0 0 rgba(var(--kd-accent-rgb), 0.34);
+    animation: kdLiveDot 1.8s ease-in-out infinite;
+}
+
+.kadouane_dashboard .kd_metric strong {
+    justify-self: end;
+    color: var(--kd-accent-dark);
+    font-size: 38px;
+    font-weight: 900;
+    line-height: 0.86;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 12px 26px rgba(var(--kd-accent-rgb), 0.24);
+    animation: kdNumberPop 1.05s cubic-bezier(0.2, 0.82, 0.2, 1) both;
+}
+
+.kadouane_dashboard .kd_metric_bar {
+    position: relative;
+    grid-column: 1 / -1;
+    display: block;
+    height: 5px;
+    overflow: hidden;
+    margin-top: 9px;
+    border-radius: 999px;
+    background: rgba(var(--kd-accent-rgb), 0.13);
+}
+
+.kadouane_dashboard .kd_metric_bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 58%;
+    border-radius: inherit;
+    background:
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.28) 0 8px, transparent 8px 16px),
+        linear-gradient(90deg, var(--kd-accent), var(--kd-accent-2));
+    box-shadow: 0 0 18px rgba(var(--kd-accent-rgb), 0.42);
+    animation: kdProgressFlow 2.6s ease-in-out infinite;
+}
+
+.kadouane_dashboard .kd_dashboard_title h2::after {
+    content: "";
+    display: block;
+    width: 42px;
+    height: 3px;
+    margin-top: 9px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--kd-accent), var(--kd-accent-2));
+    box-shadow: 0 6px 16px rgba(var(--kd-accent-rgb), 0.28);
+    transform-origin: left center;
+    transition: transform 0.24s ease;
+}
+
+.kadouane_dashboard .kd_dashboard_card:hover .kd_dashboard_title h2::after {
+    transform: scaleX(1.45);
+}
+
+.kadouane_dashboard .kd_action_area,
+.kadouane_dashboard .kd_create_area {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    width: auto;
+    max-width: none;
+    padding: 0;
+}
+
+.kadouane_dashboard .kd_create_area {
+    order: 3;
+}
+
+.kadouane_dashboard .kd_action_area {
+    flex: 1 1 100%;
+    order: 4;
+}
+
+.kadouane_dashboard .kd_btn {
+    position: relative;
+    min-height: 36px;
+    overflow: hidden;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1;
+    box-shadow: 0 11px 24px rgba(var(--kd-accent-rgb), 0.24);
+    transform: translateZ(0);
+    transition: transform 0.20s ease, box-shadow 0.20s ease, filter 0.20s ease;
+}
+
+.kadouane_dashboard .kd_btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.32) 45%, transparent 62%);
+    transform: translateX(-120%);
+    transition: transform 0.54s ease;
+}
+
+.kadouane_dashboard .kd_btn:hover,
+.kadouane_dashboard .kd_btn:focus {
+    transform: translateY(-3px) scale(1.025);
+    filter: saturate(1.10) brightness(1.02);
+    box-shadow: 0 15px 30px rgba(var(--kd-accent-rgb), 0.32);
+}
+
+.kadouane_dashboard .kd_btn:hover::before,
+.kadouane_dashboard .kd_btn:focus::before {
+    transform: translateX(120%);
+}
+
+.kadouane_dashboard .kd_btn:active {
+    transform: translateY(-1px) scale(0.99);
+}
+
+.kadouane_dashboard .kd_btn_status,
+.kadouane_dashboard .kd_btn_status.btn-primary {
+    background:
+        linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent),
+        linear-gradient(135deg, var(--kd-accent), var(--kd-accent-dark));
+}
+
+.kadouane_dashboard .kd_btn_create,
+.kadouane_dashboard .kd_btn_archive,
+.kadouane_dashboard .kd_btn_create.btn-success,
+.kadouane_dashboard .kd_btn_archive.btn-success {
+    background: linear-gradient(135deg, #17bf73, #0e9f61);
+    box-shadow: 0 11px 24px rgba(19, 161, 93, 0.24);
+}
+
+.kadouane_dashboard .kd_btn span::after {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-left: 8px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    opacity: 0.76;
+    transform: rotate(45deg) translateY(-1px);
+    transition: transform 0.20s ease;
+}
+
+.kadouane_dashboard .kd_btn:hover span::after,
+.kadouane_dashboard .kd_btn:focus span::after {
+    transform: rotate(45deg) translate(2px, -3px);
+}
+
+.kadouane_dashboard .o_secondary {
+    color: inherit;
+    font-weight: inherit;
+}
+
+.kadouane_dashboard .kd_btn field,
+.kadouane_dashboard .kd_btn .o_field_widget {
+    animation: kdCountPulse 2.5s ease-in-out infinite;
+}
+
+.kadouane_dashboard .kd_state_nouvelle {
+    --kd-accent: #13a15d;
+    --kd-accent-dark: #087443;
+    --kd-accent-2: #32d583;
+    --kd-accent-rgb: 19, 161, 93;
+}
+
+.kadouane_dashboard .kd_state_transport,
+.kadouane_dashboard .kd_state_validationMlog,
+.kadouane_dashboard .kd_state_validationMFi,
+.kadouane_dashboard .kd_state_validationMD {
+    --kd-accent: #2563eb;
+    --kd-accent-dark: #1e40af;
+    --kd-accent-2: #06b6d4;
+    --kd-accent-rgb: 37, 99, 235;
+}
+
+.kadouane_dashboard .kd_state_picking,
+.kadouane_dashboard .kd_state_livraison {
+    --kd-accent: #7c3aed;
+    --kd-accent-dark: #5b21b6;
+    --kd-accent-2: #ec4899;
+    --kd-accent-rgb: 124, 58, 237;
+}
+
+.kadouane_dashboard .kd_state_facturation,
+.kadouane_dashboard .kd_state_factureFreight,
+.kadouane_dashboard .kd_state_ticketPaiment {
+    --kd-accent: #e11d48;
+    --kd-accent-dark: #9f1239;
+    --kd-accent-2: #f59e0b;
+    --kd-accent-rgb: 225, 29, 72;
+}
+
+.kadouane_dashboard .kd_state_douane,
+.kadouane_dashboard .kd_state_Cloture,
+.kadouane_dashboard .kd_state_attenteDUM,
+.kadouane_dashboard .kd_state_caution {
+    --kd-accent: #0891b2;
+    --kd-accent-dark: #155e75;
+    --kd-accent-2: #14b8a6;
+    --kd-accent-rgb: 8, 145, 178;
+}
+
+.kadouane_dashboard .kd_state_mainlevee,
+.kadouane_dashboard .kd_state_done,
+.kadouane_dashboard .kd_state_bad {
+    --kd-accent: #9333ea;
+    --kd-accent-dark: #6b21a8;
+    --kd-accent-2: #f97316;
+    --kd-accent-rgb: 147, 51, 234;
+}
+
+.kadouane_dashboard .kd_state_archive {
+    --kd-accent: #475467;
+    --kd-accent-dark: #1d2939;
+    --kd-accent-2: #12b76a;
+    --kd-accent-rgb: 71, 84, 103;
+}
+
+@keyframes kdDashboardFlow {
+    from {
+        background-position: 0% 42%;
+    }
+    to {
+        background-position: 100% 58%;
+    }
+}
+
+@keyframes kdAmbientSweep {
+    0%, 100% {
+        opacity: 0.36;
+        transform: translateX(-22%);
+    }
+    50% {
+        opacity: 0.70;
+        transform: translateX(18%);
+    }
+}
+
+@keyframes kdCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.965);
+        filter: blur(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes kdBorderRun {
+    from {
+        background-position: 0% 50%;
+    }
+    to {
+        background-position: 300% 50%;
+    }
+}
+
+@keyframes kdGlowFloat {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(-16px, -12px) scale(1.12);
+    }
+}
+
+@keyframes kdBadgePulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.88;
+    }
+    50% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+}
+
+@keyframes kdCountPulse {
+    0%, 100% {
+        text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+    50% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.72);
+    }
+}
+
+@keyframes kdNumberPop {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.86);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes kdProgressFlow {
+    0%, 100% {
+        width: 42%;
+        transform: translateX(0);
+    }
+    50% {
+        width: 82%;
+        transform: translateX(12%);
+    }
+}
+
+@keyframes kdLiveDot {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(var(--kd-accent-rgb), 0.34);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 7px rgba(var(--kd-accent-rgb), 0);
+        transform: scale(1.12);
+    }
+}
+
+@keyframes kdScanLine {
+    0%, 38% {
+        opacity: 0;
+        transform: rotate(-24deg) translateX(-120px);
+    }
+    48%, 60% {
+        opacity: 0.88;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(-24deg) translateX(190px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .kadouane_dashboard,
+    .kadouane_dashboard *,
+    .kadouane_dashboard *::before,
+    .kadouane_dashboard *::after {
+        animation-duration: 0.001ms;
+        animation-iteration-count: 1;
+        transition-duration: 0.001ms;
+    }
+}
+
+@media (max-width: 768px) {
+    .kadouane_dashboard {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .kadouane_dashboard .kd_dashboard_card {
+        min-height: 184px;
+        padding: 17px;
+    }
+
+    .kadouane_dashboard .kd_dashboard_row {
+        gap: 10px;
+    }
+
+    .kadouane_dashboard .kd_dashboard_title {
+        max-width: calc(100% - 48px);
+    }
+
+    .kadouane_dashboard .kd_dashboard_title h2 {
+        font-size: 18px;
+    }
+
+    .kadouane_dashboard .kd_metric strong {
+        font-size: 32px;
+    }
+
+    .kadouane_dashboard .kd_dashboard_card::after {
+        right: 14px;
+        top: 14px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .kadouane_dashboard .kd_dashboard_title::before {
+        right: 27px;
+        top: 24px;
+        width: 13px;
+        height: 13px;
+    }
+
+    .kadouane_dashboard .kd_btn {
+        max-width: 100%;
+        white-space: normal;
+        line-height: 1.12;
+    }
+}
