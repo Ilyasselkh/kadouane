@@ -1,0 +1,104 @@
+<odoo>
+  <data>
+
+    <!-- Formulaire client -->
+    <record id="view_douaneclient_form" model="ir.ui.view">
+      <field name="name">kadouane.client.form</field>
+      <field name="model">kadouane.client</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="shipto"/>
+                <field name="typetransit"/>
+                <field name="incoterm"/>
+                <field name="billto"/>
+                <field name="transportmanagement"/>
+                <field name="transitmanagement"/>
+                <field name="arnetwork"/>
+                <field name="domicilation"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Liste clients -->
+    <record model="ir.ui.view" id="kadouane_client_list">
+      <field name="name">Liste des clients</field>
+      <field name="model">kadouane.client</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="shipto"/>
+          <field name="incoterm"/>
+          <field name="billto"/>
+          <field name="typetransit"/>
+          <field name="transportmanagement"/>
+          <field name="transitmanagement"/>
+          <field name="arnetwork"/>
+          <field name="domicilation"/>
+        </list>
+      </field>
+    </record>
+
+    <!-- Formulaire fournisseur -->
+    <record id="view_douanesupplier_form" model="ir.ui.view">
+      <field name="name">kadouane.supplier.form</field>
+      <field name="model">kadouane.supplier</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="vendor"/>
+                <field name="incoterm"/>
+                <field name="adress"/>
+                <field name="transportmanagement"/>
+                <field name="transitmanagement"/>
+                <field name="arnetwork"/>
+                <field name="domicilation"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Liste fournisseurs -->
+    <record model="ir.ui.view" id="kadouane_supplier_list">
+      <field name="name">Liste des fournisseurs</field>
+      <field name="model">kadouane.supplier</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="vendor"/>
+          <field name="incoterm"/>
+          <field name="adress"/>
+          <field name="transportmanagement"/>
+          <field name="transitmanagement"/>
+          <field name="arnetwork"/>
+          <field name="domicilation"/>
+        </list>
+      </field>
+    </record>
+
+    <!-- Action clients -->
+    <record model="ir.actions.act_window" id="kadouane.action_window">
+      <field name="name">Gestion des clients</field>
+      <field name="res_model">kadouane.client</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem name="Clients"
+              id="kadouane.clients"
+              parent="kadouane.menu_root_masterdata"
+              action="kadouane.action_window"/>
+
+  </data>
+</odoo>
