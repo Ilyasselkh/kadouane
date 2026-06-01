@@ -1,0 +1,64 @@
+<odoo>
+  <data>
+
+    <record id="view_kadouane_documentation_form" model="ir.ui.view">
+      <field name="name">kadouane.documentation.form</field>
+      <field name="model">kadouane.documentation</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+                <field name="name"/>
+                <field name="file" filename="file_filename"/>
+                <field name="file_filename" invisible="1"/>
+                <field name="link" placeholder="https://..."/>
+            </group>
+            <group string="AUDIT">
+              <field name="create_uid" string="Realise par"/>
+              <field name="create_date" string="Date"/>
+            </group>
+          </sheet>
+          <chatter/>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_kadouane_documentation_list" model="ir.ui.view">
+      <field name="name">kadouane.documentation.list</field>
+      <field name="model">kadouane.documentation</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="file_filename"/>
+          <field name="link"/>
+          <field name="create_uid"/>
+          <field name="create_date"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="view_kadouane_documentation_search" model="ir.ui.view">
+      <field name="name">kadouane.documentation.search</field>
+      <field name="model">kadouane.documentation</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name"/>
+          <field name="link"/>
+        </search>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_window_documentation">
+      <field name="name">Documentation</field>
+      <field name="res_model">kadouane.documentation</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem name="Documentation"
+              id="menu_documentation"
+              parent="kadouane.menu_root"
+              action="kadouane.action_window_documentation"
+              sequence="4"/>
+
+  </data>
+</odoo>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="order_transit_import">
+        <t t-call="web.html_container">
+
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        
+                        <div class="page">
+                            <div class="oe_structure"/>
+                                <h2 class="mt-12">
+                                    <div class="text-center">
+                                        <strong>
+                                            ORDRE DE TRANSIT
+                                        </strong>
+                                    </div>
+                                    
+                                </h2>
+
+                                <h2 class="mt-4">
+                                    Numero d'order : 
+                                    <span t-field="doc.referenceID"/>
+                                </h2>
+
+                                 
+                                    <div>Fournisseur : <strong><span t-field="doc.supplier_id.name"/></strong></div> 
+                                    <div>Adresse : <strong><span t-field="doc.supplier_id.adress"/></strong></div> 
+                                    <div style="font-weight:normal">Incoterm : <span t-field="doc.supplier_id.incoterm"  style="font-size:1.1em;font-weight:900"/></div>
+                                    <div>Type du transport : <strong><span t-field="doc.typetransport"/></strong></div> 
+                                    <div>Date d'operation : <strong><span t-field="doc.dateoperation"/></strong></div> 
+                                    <t t-if="doc.supplier_id.domicilation">
+                                        <div>
+                                            Banque domiciliation : 
+                                            <strong><span t-field="doc.supplier_id.domicilation"/></strong>
+                                        </div>
+                                    </t>
+
+                                    
+                            <table class="table table-sm o_main_table mt-4">
+                                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                                <thead style="display: table-row-group">
+                                    <tr>
+                                        <th name="NGP" class="text-center" style="font-size:1.1em;font-weight:900">Type</th>
+                                        <th name="NGP" class="text-center" style="font-size:1.1em;font-weight:900">Nombre</th>
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Poids Net</th>      
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Longeur</th>                                        
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Largeur</th>    
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Hauteur</th>  
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">BLs</th>  
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Factures</th>
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Regime</th> 
+                                        <th name="UQ" class="text-center" style="font-size:1.1em;font-weight:900">Commentaire</th>    
+                                    </tr>
+                                </thead>
+                                <tbody class="sale_tbody">
+                                    <t t-foreach="doc.marchandise_ids" t-as="line">
+                                        <tr >
+                                            <td name="typetransport" class="text-center"><span t-field="line.typetransport"/></td>
+                                            <td name="nbr" class="text-center"><span t-field="line.nbr"/></td>
+                                            <td name="typetransport" class="text-center"><span t-field="line.poids"/></td>
+                                            <td name="nbr" class="text-center"><span t-field="line.Long"/></td>
+                                            <td name="typetransport" class="text-center"><span t-field="line.Largeur"/></td>
+                                            <td name="hauteur" class="text-center"><span t-field="line.hauteur"/></td> 
+                                            <td name="BlN" class="text-center"><span t-field="line.BlN"/></td>  
+                                            <td name="FactureN" class="text-center"><span t-field="line.FactureN"/></td> 
+                                            <td name="regime" class="text-center"><span t-field="line.regime"/></td>
+                                            <td name="commentairedanslorderdetransit" class="text-center"><span t-field="line.commentairedanslorderdetransit"/></td>                                                                                       
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+
+
+
+                    </t> 
+
+                  
+                </t>
+
+          
+        </t>
+    </template>
+</odoo>
+
+
+
